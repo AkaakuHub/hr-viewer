@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 			},
 			body: JSON.stringify({
 				"ip_address": clientIP,
-				"guest": "123"
+				"guest": "from_route"
 			}),
 		});
 		const json = await response.json();

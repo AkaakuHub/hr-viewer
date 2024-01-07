@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useState } from 'react';
+import renderJson from './_components/renderjson';
 
 const HomePage = () => {
 	const [webhookData, setWebhookData] = useState(null);
@@ -10,9 +11,6 @@ const HomePage = () => {
 
 	const fetchData = async () => {
 		try {
-			setIsCountdown(true);
-			startCountdown();
-			
 			const response = await fetch("/api/webhook", {
 				method: "POST",
 			});
@@ -50,11 +48,15 @@ const HomePage = () => {
 
 	return (
 		<div>
-			<button onClick={fetchData} className=
+			<button onClick={()=> {
+				setIsCountdown(true);
+				startCountdown();
+				fetchData();
+			}} className=
 			{`${
 				isCountdown ? 'bg-gray-500 cursor-not-allowed' : 
 				'bg-blue-500 hover:bg-blue-700 active:bg-blue-800'
-				} text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue`}
+				} text-white py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue`}
 				disabled={isCountdown}
 			>
 			{isCountdown ? (
@@ -65,24 +67,13 @@ const HomePage = () => {
 				</>
 			) : (
 				<>
-				手動で
+				　　　　 　手動で　　　　 　
 				<br />
-				更新する
+				　　　　　更新する　　　　　
 				</>
 			)}
 			</button>
-			{webhookData ? (
-				<pre
-				>
-					
-					{JSON.stringify(webhookData, null, 4)}
-				</pre>
-			) : (
-				<pre className=""
-				>
-					{JSON.stringify(require('./_components/data.json'), null, 4)}
-				</pre>
-			)}
+			{webhookData ? renderJson(webhookData) : renderJson(require('./_components/data.json')) }
 		</div>
 	);
 };

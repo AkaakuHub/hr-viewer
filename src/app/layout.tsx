@@ -3,7 +3,7 @@ import { Zen_Kaku_Gothic_New } from "next/font/google";
 import './globals.css'
 
 const zengothic = Zen_Kaku_Gothic_New({
-	weight: "300",
+	weight: "500",
 	subsets: ["latin"],
 });
 
@@ -22,14 +22,24 @@ export default function RootLayout({
 	// const rotateLittleClass = "transform rotate-0.03"
 	return (
 		<html lang="ja">
-			<head />
-			<body className={`${zengothic.className} ${bodyClass}` }>
-				<header className="text-center text-5xl">
-					<h1 className="font-bold fixed top-0 left-0 right-0 bg-gray-500 text-white text-lg p-2"
-					>{process.env.HTML_TITLE} </h1>
+			<head>
+				<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+				<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+				<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+				<link rel="manifest" href="/favicons/site.webmanifest" />
+				<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#414bb2" />
+				<link rel="shortcut icon" href="/favicons/favicon.ico" />
+				<meta name="msapplication-TileColor" content="#414bb2" />
+				<meta name="msapplication-config" content="/favicons/browserconfig.xml" />
+				<meta name="theme-color" content="#414bb2" />
+			</head>
+			<body className={`${zengothic.className} ${bodyClass}`}>
+				<header className="text-center text-5xl z-100">
+					<div className="fixed top-0 left-0 right-0 bg-blue-411 text-white text-lg p-2"
+					>{process.env.HTML_TITLE} </div>
 				</header>
-				<div className={` ${rotateLittleClass} mt-14`}>
-				{children}
+				<div className={` ${rotateLittleClass} mt-14 ml-4`}>
+					{children}
 				</div>
 				<footer>
 					<div className="text-center text-base">
