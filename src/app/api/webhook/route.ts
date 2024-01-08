@@ -12,16 +12,19 @@ export async function POST(req: NextRequest) {
 			return new Response("Method Not Allowed", { status: 405 });
 		}
 
-		const clientIP = req.headers.get("x-forwarded-for") || "unknown";
-
+		const basicInfo = req.headers.get("x-forwarded-for") || "unknown";
+		const requestBody = await req.json();
+		const value1: string = requestBody.value1 || "unknown";
+		const value2: string = requestBody.value2 || "unknown";
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				"ip_address": clientIP,
-				"guest": process.env.LOCAL_STATE
+				basicInfo: basicInfo,
+				value1: value1,
+				value2: value2,
 			}),
 		});
 		const json = await response.json();

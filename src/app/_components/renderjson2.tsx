@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Text, Label, Legend, BarChart, Bar, XAxis, YAxis, 
 
 const COLORS = ["#24A4F3", "#00C4AF", "#FFBB28", "#FF8042", "#8A54B2"];
 
-const renderJson = (json: any) => {
+const renderJson2 = (json: any) => {
     const splitOthers = (i: number, elements: any[], keyi: string, valuei: any[]) => {
         let newList: any = {};
         for (let j = 0; j < valuei.length; j++) {
@@ -163,7 +163,7 @@ const renderJson = (json: any) => {
     );
 };
 
-export default renderJson;
+export default renderJson2;
 
 const countOccurrences = (i: number, arr: any[]) => {
     if ([7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21].includes(i)) {
