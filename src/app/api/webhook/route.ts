@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import fs from "fs/promises";
-import { read } from "fs";
 
 export async function POST(req: NextRequest) {
 	try {
@@ -22,34 +21,18 @@ export async function POST(req: NextRequest) {
 			},
 			body: JSON.stringify({
 				"ip_address": clientIP,
-				"guest": "from_route"
+				"guest": process.env.LOCAL_STATE
 			}),
 		});
 		const json = await response.json();
-		// statusが0ならば、
-		// jsonをファイルとしてサーバーサイドに保存
 		const status = json.status;
-		console.log(status);
 		if (status === "0"){
 			await saveJson(json);
-			return new Response(JSON.stringify(json), {
-				headers: { "Content-Type": "application/json" },
-				status: 200,
-			});
-		} else {
-			// statusが0以外ならば、"./src/app/_components/data.json"のjsonを返す
-			const path = "./src/app/_components/data.json";
-			try{
-				const fileData = await fs.readFile(path, "utf-8");
-				return new Response(fileData, {
-					headers: { "Content-Type": "application/json" },
-					status: 200,
-				});
-			} catch (error) {
-				console.error("ファイル読み込みエラー:", error);
-				return new Response("Internal server error", { status: 500 });
-			}
 		}
+		return new Response(JSON.stringify(json), {
+			headers: { "Content-Type": "application/json" },
+			status: 200,
+		});
 	} catch (error) {
 		console.error("Webhookサーバーエラー:", error);
 		return new Response("Internal server error", { status: 500 });
@@ -65,5 +48,3 @@ async function saveJson(json: any) {
 		console.error("ファイル保存エラー:", error);
 	}
 }
-
-// jsonのstatusは0が保証されている

@@ -34,11 +34,11 @@ export default function RootLayout({
 				<meta name="theme-color" content="#414bb2" />
 			</head>
 			<body className={`${zengothic.className} ${bodyClass}`}>
-				<header className="text-center text-5xl z-100">
-					<div className="fixed top-0 left-0 right-0 bg-blue-411 text-white text-lg p-2"
+				<header className="text-center z-100">
+					<div className="top-0 left-0 right-0 bg-blue-411 text-white text-3xl p-2"
 					>{process.env.HTML_TITLE} </div>
 				</header>
-				<div className={` ${rotateLittleClass} mt-14 ml-4`}>
+				<div className={` ${rotateLittleClass} mt-4 ml-4`}>
 					{children}
 				</div>
 				<footer>

@@ -5,7 +5,7 @@ import renderJson from './_components/renderjson';
 
 const HomePage = () => {
 	const [webhookData, setWebhookData] = useState(null);
-
+	const [isFetching, setIsFetching] = useState(true);
 	const [isCountdown, setIsCountdown] = useState(false);
 	const [countdown, setCountdown] = useState(60);
 
@@ -16,10 +16,16 @@ const HomePage = () => {
 			});
 
 			const data = await response.json();
-			setWebhookData(data);
+			const status = JSON.parse(data.status);
+			if (status === 1) {
+				setIsCountdown(true);
+			} else if (status === 0) {
+				setWebhookData(data);
+			}
 		} catch (error) {
 			console.error('Webhookリクエストエラー:', error);
 		}
+		setIsFetching(false);
 	};
 
 	const startCountdown = () => {
@@ -41,6 +47,12 @@ const HomePage = () => {
 		}
 	}, [countdown]);
 
+	useEffect(() => {
+		if (isCountdown) {
+			startCountdown();
+		}
+	}, [isCountdown]);
+
 	// ページ読み込み時に一回だけデータを取得する
 	useEffect(() => {
 		fetchData();
@@ -49,15 +61,13 @@ const HomePage = () => {
 	return (
 		<div>
 			<button onClick={()=> {
-				setIsCountdown(true);
-				startCountdown();
 				fetchData();
 			}} className=
 			{`${
-				isCountdown ? 'bg-gray-500 cursor-not-allowed' : 
+				isCountdown || isFetching ? 'bg-gray-500 cursor-not-allowed' : 
 				'bg-blue-500 hover:bg-blue-700 active:bg-blue-800'
-				} text-white py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue`}
-				disabled={isCountdown}
+				} text-white py-2 px-4 mb-4 rounded-full focus:outline-none focus:shadow-outline-blue`}
+				disabled={isCountdown || isFetching}
 			>
 			{isCountdown ? (
 				<>
@@ -65,7 +75,16 @@ const HomePage = () => {
 				<br />
 				あと{countdown}秒で回復します
 				</>
-			) : (
+			) : 
+			isFetching ? (
+				<>
+				　  　最新データを取得中　  　
+				<br />
+				　　　お待ち下さい　　　
+				</>
+			)
+			:
+			(
 				<>
 				　　　　 　手動で　　　　 　
 				<br />
