@@ -30,7 +30,6 @@ export default function LoginForm() {
             });
 
             const data = await response.json();
-            // console.log(data);
             const status = JSON.parse(data.status);
             if (status === 1) {
                 setNoticeOfRequest("API呼び出しの制限を超えました。しばらくお待ちください。");
