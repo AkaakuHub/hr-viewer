@@ -50,7 +50,8 @@ const renderJson = (json: any) => {
         const valuei = datai[1];
         if ([3, 4, 5, 6].includes(i)) {
             elements1.push(
-                <div style={{ margin: 20, minWidth: 400
+                <div style={{
+                    margin: 20
                 }} key={keyi}>
                     <h1>・{keyi}</h1>
                     {makePieChart(i, keyi, valuei)}
