@@ -29,8 +29,10 @@ export async function POST(req: NextRequest) {
 		});
 		const json = await response.json();
 		const status = json.status;
-		if (status === "0"){
-			await saveJson(json);
+		if (status === "0") {
+			if (value1 === process.env.NEXT_PUBLIC_WEBHOOK_NORMAL) {
+				await saveJson(json);
+			}
 		}
 		return new Response(JSON.stringify(json), {
 			headers: { "Content-Type": "application/json" },

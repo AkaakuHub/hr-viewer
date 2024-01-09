@@ -17,8 +17,8 @@ const HomePage = () => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					"value1": "guest",
-					"value2": process.env.LOCAL_STATE || "hoge",
+					"value1": process.env.NEXT_PUBLIC_WEBHOOK_NORMAL || "hoge",
+					"value2": process.env.NEXT_PUBLIC_LOCAL_STATE || "hoge",
 				}),
 			});
 
@@ -28,6 +28,8 @@ const HomePage = () => {
 				setIsCountdown(true);
 			} else if (status === 0) {
 				setWebhookData(data);
+			} else if (status === -1) {
+				alert("リクエストが不正です");
 			}
 		} catch (error) {
 			console.error("Webhookリクエストエラー:", error);
@@ -65,6 +67,8 @@ const HomePage = () => {
 		fetchData();
 	}, []);
 
+	const renderFirstResult = renderJson(require("./_components/data.json"));
+
 	return (
 		<div>
 			<button onClick={() => {
@@ -98,8 +102,9 @@ const HomePage = () => {
 							</>
 						)}
 			</button>
-			{webhookData ? renderJson(webhookData) : renderJson(require("./_components/data.json"))}
-			{/* 管理者ログインページへ移動するボタン */}
+			{webhookData ?
+			renderJson(webhookData) : 
+			renderFirstResult}
 			<a href="/login"
 				className="text-blue-500 hover:text-blue-600"
 			>

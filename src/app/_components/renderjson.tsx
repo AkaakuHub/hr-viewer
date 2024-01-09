@@ -41,6 +41,8 @@ const renderJson = (json: any) => {
         const data = choice[i];
         description_data.push(data);
     }
+
+    const NumberOfPeople: number = data[0][1].length;
     for (let i = 0; i <= 22; i++) {
         if ([0, 1, 2, 22].includes(i)) {
             continue;
@@ -85,11 +87,14 @@ const renderJson = (json: any) => {
             );
         }
     }
-    return (
+
+    const returnData = (
         // 要素が横にも縦にも並ぶようにする
         <div key={timestamp}
         >
             データの最終取得時刻: {timestamp}
+            <br />
+            母数: {NumberOfPeople}人
             <br />
             <br />
             <h1 className="text-2xl"
@@ -110,6 +115,7 @@ const renderJson = (json: any) => {
                     return <li key={index}>{value}</li>
                 })}
             </ul>
+            <br />
             <h1 className="text-2xl"
             >フロントエンド/バックエンド</h1>
             <ResponsiveContainer width="100%" aspect={3}
@@ -162,12 +168,17 @@ const renderJson = (json: any) => {
             </ResponsiveContainer>
         </div>
     );
+
+    // returnDataを./_components/cachedJsonComponent.tsx自体に書き込む
+    // そのために、saveCachedに、returnDataを渡す
+    // saveCached(returnData);
+    return returnData;
 };
 
 export default renderJson;
 
 const countOccurrences = (i: number, arr: any[]) => {
-    if ([7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21].includes(i)) {
+    if ([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].includes(i)) {
         // 1,2,3,4,5の順番で並べる
         // このうちどれかでもかけていたら、要素数0として追加
         const result = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 };
@@ -197,7 +208,7 @@ const countOccurrences = (i: number, arr: any[]) => {
 };
 
 const convertToOutputFormat = (i: number, occurrences: any[]) => {
-    if ([7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21].includes(i)) {
+    if ([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].includes(i)) {
         // 頻度順ではなくて、キーが1,2,3,4,5の順番で並ぶようにする
         const sortedOccurrences = Object.entries(occurrences)
             .sort(([keyA], [keyB]) => parseInt(keyA) - parseInt(keyB))
@@ -252,18 +263,27 @@ const makePieChart = (i: number, key: string, value: any[]) => {
 const makeComposedChart = (i: number, key: string, value: any[]) => {
     const occurrences = countOccurrences(i, value);
     const result = convertToOutputFormat(i, occurrences);
+    // すべてのデータのうち最大値
+    const maxValue = Math.max(...result.map((element) => element.value));
+    let maxValueTicks = [];
+    for (let i = 0; i <= maxValue; i += 2) {
+        if (maxValue < 5 || i !== maxValue - 1 || maxValue % 2 === 0) {
+            maxValueTicks.push(i);
+        }
+    }
+    if (maxValue % 2 !== 0) {
+        maxValueTicks.push(maxValue);
+    }
+
     return (
         <ComposedChart
-            width={300}
-            height={250}
+            width={150}
+            height={210}
             layout="vertical"
             data={result}
-        // margin={{
-        //     top: 20,
-        //     right: 20,
-        //     bottom: 20,
-        //     left: 20,
-        // }}
+            margin={{
+                top: 10,
+            }}
         >
             <XAxis
                 type="number"
@@ -271,17 +291,24 @@ const makeComposedChart = (i: number, key: string, value: any[]) => {
                     0,
                     "dataMax",
                 ]}
+                tick={{ fontSize: 16 }}
+                ticks={
+                    maxValueTicks}
             />
             <YAxis
                 type="category"
                 dataKey="name"
                 width={15}
                 tick={{ fontSize: 16 }}
+                domain={[
+                    0,
+                    "dataMax",
+                ]}
             />
             <CartesianGrid stroke="#f5f5f5" />
             <Bar
                 dataKey="value"
-                barSize={15}
+                barSize={10}
                 stroke="#1FC2FF"
                 fill="#24a4f3"
             />
